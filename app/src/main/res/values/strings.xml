@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">PowerStats</string>
+    <string name="helpText">
+        USB Type C specifies that any USB A to C cable has a 56kOhm resistor.\n\n
+
+        This resistor tells your phone how much voltage the cable is capable of supplying by
+        default, and by reading the maximum allowed amperage of the USB chipset should allow us to
+        estimate whether your cable happens to be Type-C compliant.
+    </string>
+    <string name="helpHeading">Help</string>
+    <string name="outputHeading">USB Output</string>
+    <string name="errorText">
+        There was an error reading your phone\'s USB power supply.\n\n
+
+        Press here to email me some debugging output so I can try to support your device too!
+    </string>
+</resources>
