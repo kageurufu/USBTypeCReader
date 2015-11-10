@@ -36,38 +36,39 @@ import java.util.Map;
  */
 public class PowerSupplyReader {
     private final static String TAG = "USBC.PowerSupplyReader";
-    private final static String DEFAULT_PATH = "/sys/class/power_supply/usb/";
-    private String mDevicePowerSupplyPath;
 
-    public static final Map<String, String> devicePowerSupplyPaths = new HashMap<String, String>() {
+    private File mFile;
+
+    public static final Map<String, File> devicePowerSupplyPaths = new HashMap<String, File>() {
         {
             /*
              * TODO: Populate this with {PRODUCT: path} mappings to a proper power_supply readout
              * put("angler", "/sys/class/power_supply/usb/");
              */
+            put(null, new File("/sys/class/power_supply/usb-parallel/", "uevent"));
         }
     };
 
     public PowerSupplyReader() throws UnknownDevicePathException {
         if (devicePowerSupplyPaths.containsKey(Build.PRODUCT)) {
-            mDevicePowerSupplyPath = devicePowerSupplyPaths.get(Build.PRODUCT);
+            mFile = devicePowerSupplyPaths.get(Build.PRODUCT);
         } else {
-            mDevicePowerSupplyPath = DEFAULT_PATH;
+            mFile = devicePowerSupplyPaths.get(null);
         }
 
         Log.d(TAG, "Got device ID " + Build.PRODUCT);
-        Log.d(TAG, "Using path " + mDevicePowerSupplyPath);
+        Log.d(TAG, "Using " + mFile.getAbsolutePath());
     }
 
     public PowerSupplyStats readDevice() {
         return new PowerSupplyStats(readSysINode());
     }
+
     public String readSysINode() {
-        File sysFile = new File(mDevicePowerSupplyPath, "uevent");
         StringBuilder text = new StringBuilder();
 
         try {
-            BufferedReader br = new BufferedReader(new FileReader(sysFile));
+            BufferedReader br = new BufferedReader(new FileReader(mFile));
             String line;
 
             while ((line = br.readLine()) != null) {

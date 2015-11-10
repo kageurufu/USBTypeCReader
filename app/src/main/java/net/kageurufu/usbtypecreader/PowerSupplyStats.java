@@ -8,16 +8,13 @@ import java.util.Map;
 public class PowerSupplyStats {
     private final static String TAG = "USBC.PowerSupplyStats";
     private Map<String, String> mUeventValues;
-
-    private static final String POWER_SUPPLY_NAME = "POWER_SUPPLY_NAME";
-    private static final String POWER_SUPPLY_PRESENT = "POWER_SUPPLY_PRESENT";
-    private static final String POWER_SUPPLY_ONLINE = "POWER_SUPPLY_ONLINE";
-    private static final String POWER_SUPPLY_VOLTAGE_MAX = "POWER_SUPPLY_VOLTAGE_MAX";
-    private static final String POWER_SUPPLY_CURRENT_MAX = "POWER_SUPPLY_CURRENT_MAX";
-    private static final String POWER_SUPPLY_TYPE = "POWER_SUPPLY_TYPE";
-    private static final String POWER_SUPPLY_SCOPE = "POWER_SUPPLY_SCOPE";
-    private static final String POWER_SUPPLY_VOLTAGE_NOW = "POWER_SUPPLY_VOLTAGE_NOW";
-    private static final String POWER_SUPPLY_HEALTH = "POWER_SUPPLY_HEALTH";
+    private final static String POWER_SUPPLY_NAME = "POWER_SUPPLY_NAME"; //usb-parallel
+    private final static String POWER_SUPPLY_CHARGING_ENABLED = "POWER_SUPPLY_CHARGING_ENABLED"; //1
+    private final static String POWER_SUPPLY_STATUS = "POWER_SUPPLY_STATUS"; //Not charging
+    private final static String POWER_SUPPLY_PRESENT = "POWER_SUPPLY_PRESENT"; //1
+    private final static String POWER_SUPPLY_CURRENT_MAX = "POWER_SUPPLY_CURRENT_MAX"; //2000
+    private final static String POWER_SUPPLY_VOLTAGE_MAX = "POWER_SUPPLY_VOLTAGE_MAX"; //4450
+    private final static String POWER_SUPPLY_CONSTANT_CHARGE_CURRENT_MAX = "POWER_SUPPLY_CONSTANT_CHARGE_CURRENT_MAX"; //1000000
 
     public PowerSupplyStats(String uevent) {
 
@@ -40,25 +37,18 @@ public class PowerSupplyStats {
         return null;
     }
 
-    public String getType() {
-        if (mUeventValues.containsKey(POWER_SUPPLY_TYPE)) {
-            return mUeventValues.get(POWER_SUPPLY_TYPE);
+    public String getStatus() {
+        if (mUeventValues.containsKey(POWER_SUPPLY_STATUS)) {
+            return mUeventValues.get(POWER_SUPPLY_STATUS);
         }
         return null;
     }
 
-    public String getScope() {
-        if (mUeventValues.containsKey(POWER_SUPPLY_SCOPE)) {
-            return mUeventValues.get(POWER_SUPPLY_SCOPE);
+    public Boolean isEnabled() {
+        if (mUeventValues.containsKey(POWER_SUPPLY_CHARGING_ENABLED)) {
+            return mUeventValues.get(POWER_SUPPLY_CHARGING_ENABLED).equals("1");
         }
-        return null;
-    }
-
-    public String getHealth() {
-        if (mUeventValues.containsKey(POWER_SUPPLY_HEALTH)) {
-            return mUeventValues.get(POWER_SUPPLY_HEALTH);
-        }
-        return null;
+        return false;
     }
 
     public Boolean isPresent() {
@@ -68,12 +58,6 @@ public class PowerSupplyStats {
         return false;
     }
 
-    public Boolean isOnline() {
-        if (mUeventValues.containsKey(POWER_SUPPLY_ONLINE)) {
-            return mUeventValues.get(POWER_SUPPLY_ONLINE).equals("1");
-        }
-        return false;
-    }
 
     public Integer getVoltageMax() {
         if (mUeventValues.containsKey(POWER_SUPPLY_VOLTAGE_MAX)) {
@@ -82,16 +66,16 @@ public class PowerSupplyStats {
         return 0;
     }
 
-    public Integer getVoltageNow() {
-        if (mUeventValues.containsKey(POWER_SUPPLY_VOLTAGE_NOW)) {
-            return Integer.parseInt(mUeventValues.get(POWER_SUPPLY_VOLTAGE_NOW));
+    public Integer getCurrentMax() {
+        if (mUeventValues.containsKey(POWER_SUPPLY_CURRENT_MAX)) {
+            return Integer.parseInt(mUeventValues.get(POWER_SUPPLY_CURRENT_MAX));
         }
         return 0;
     }
 
-    public Integer getCurrentMax() {
-        if (mUeventValues.containsKey(POWER_SUPPLY_CURRENT_MAX)) {
-            return Integer.parseInt(mUeventValues.get(POWER_SUPPLY_CURRENT_MAX)) / 1000;
+    public Integer getConstantChargeCurrentMax() {
+        if (mUeventValues.containsKey(POWER_SUPPLY_CONSTANT_CHARGE_CURRENT_MAX)) {
+            return Integer.parseInt(mUeventValues.get(POWER_SUPPLY_CONSTANT_CHARGE_CURRENT_MAX)) / 1000;
         }
         return 0;
     }

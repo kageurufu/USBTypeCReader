@@ -24,13 +24,14 @@ public class MainActivity extends AppCompatActivity {
             StringBuilder sb = new StringBuilder();
 
             if (powerSupplyStats.isPresent()) {
-                sb.append(String.format("Power supply's type is %s<br/>",
-                        powerSupplyStats.getType()));
+                sb.append(String.format("Currently %s<br/>",
+                        powerSupplyStats.getStatus()));
                 sb.append(String.format("It's maximum current is %dmAh<br/>",
                         powerSupplyStats.getCurrentMax()));
-                sb.append(String.format("It's currently providing %d of a maximum of %d volts<br/><br/><br/>",
-                        powerSupplyStats.getVoltageNow(), powerSupplyStats.getVoltageMax()));
-
+                sb.append(String.format("It's constant charge current max is %d<br/>",
+                        powerSupplyStats.getConstantChargeCurrentMax(), powerSupplyStats.getVoltageMax()));
+                sb.append(String.format("It's maximum voltage is %d<br/><br/>",
+                        powerSupplyStats.getVoltageMax()));
                 sb.append('\n');
                 if (powerSupplyStats.getCurrentMax() > 2500 /*mAh*/) {
                     sb.append(String.format("<font color=\"red\">" +
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 sb.append("Not connected to power supply").append('\n');
             }
 
+            sb.append(mPowerSupplyReader.readSysINode().replace("\n", "<br/>")).append('\n');
             mOutput.setText(Html.fromHtml(sb.toString()));
         }
     };
